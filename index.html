@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minecraft Midpoint Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #222;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #00ff99;
+    }
+    .input-group {
+      margin: 1rem 0;
+    }
+    input {
+      padding: 0.5rem;
+      margin: 0.25rem;
+      width: 60px;
+      text-align: center;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      background: #00ff99;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+    .output {
+      margin-top: 2rem;
+      background: #333;
+      padding: 1rem;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 400px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Minecraft Midpoint Calculator</h1>
 
+  <div class="input-group">
+    <label>Enter coordinates (leave blank to skip):</label><br>
+    <input type="number" id="x1" placeholder="X1">
+    <input type="number" id="y1" placeholder="Y1">
+    <input type="number" id="z1" placeholder="Z1"><br>
+    <input type="number" id="x2" placeholder="X2">
+    <input type="number" id="y2" placeholder="Y2">
+    <input type="number" id="z2" placeholder="Z2">
+  </div>
+
+  <button onclick="calculateMidpoint()">Calculate Midpoint</button>
+
+  <div class="output" id="output"></div>
+
+  <script>
+    function midpoint(val1, val2) {
+      if (val1 === null || val2 === null) return '~';
+      const avg = (val1 + val2) / 2;
+      const rounded = Math.round(avg);
+      const uneven = avg % 1 !== 0;
+      return { value: rounded, uneven: uneven };
+    }
+
+    function calculateMidpoint() {
+      const x1 = document.getElementById("x1").value ? parseFloat(document.getElementById("x1").value) : null;
+      const y1 = document.getElementById("y1").value ? parseFloat(document.getElementById("y1").value) : null;
+      const z1 = document.getElementById("z1").value ? parseFloat(document.getElementById("z1").value) : null;
+      const x2 = document.getElementById("x2").value ? parseFloat(document.getElementById("x2").value) : null;
+      const y2 = document.getElementById("y2").value ? parseFloat(document.getElementById("y2").value) : null;
+      const z2 = document.getElementById("z2").value ? parseFloat(document.getElementById("z2").value) : null;
+
+      const mx = midpoint(x1, x2);
+      const my = midpoint(y1, y2);
+      const mz = midpoint(z1, z2);
+
+      let output = `<strong>Midpoint:</strong><br>`;
+      output += `X: ${mx.value ?? '~'} ${mx.uneven ? '(+1 block added)' : ''}<br>`;
+      output += `Y: ${my.value ?? '~'} ${my.uneven ? '(+1 block added)' : ''}<br>`;
+      output += `Z: ${mz.value ?? '~'} ${mz.uneven ? '(+1 block added)' : ''}<br><br>`;
+
+      output += `<strong>Teleport Command:</strong><br>`;
+      output += `/tp @s ${mx.value ?? '~'} ${my.value ?? '~'} ${mz.value ?? '~'}`;
+
+      document.getElementById("output").innerHTML = output;
+    }
+  </script>
+</body>
+</html>
